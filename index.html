@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Suitability Scorer</title>
+    <!-- 
+        *** FIX: Using a local path instead of CDN to avoid CSP blocking. ***
+        You must download the content of https://cdn.tailwindcss.com/3.4.17
+        and save it as 'tailwind.min.js' in the same directory as this file. 
+    -->
+    <script src="./tailwind.min.js"></script>
+    <style>
+        /* Custom styles for aesthetic enhancements */
+        :root {
+            --primary-color: #e51937; /* A deep red, similar to a car badge */
+            --bg-color: #f7f9fb;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+        }
+
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-radius: 1rem;
+            background-color: white;
+        }
+
+        .result-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            transition: background-color 0.2s;
+        }
+
+        .primary-btn:hover {
+            background-color: #c91530;
+        }
+
+        .match-badge {
+            background-color: #ecfdf5; /* Light green */
+            color: #059669; /* Dark green */
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-gray-800">Vehicle Suitability Scorer</h1>
+            <p class="mt-2 text-xl text-gray-500">Test your model scoring logic with a simple, interactive questionnaire.</p>
+        </header>
+
+        <main class="grid lg:grid-cols-2 gap-8">
+            <!-- Questionnaire Form -->
+            <div id="questionnaire" class="card p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-700">User Profile</h2>
+                <form id="car-quiz-form" class="space-y-6">
+
+                    <!-- Q1: How many people -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">1. How many people (and/or dogs!) are typically in your car? (Filter)</label>
+                        <select name="people" id="people-select" onchange="updateVibeOptions()" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            <option value="1-2">1-2</option>
+                            <option value="2-4">2-4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+
+                    <!-- Q2: Perfect Car Vibe (Dynamically Populated) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">2. What car feels right to you? (Filter)</label>
+                        <select name="vibe" id="vibe-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            <!-- Options populated by JavaScript based on Q1 -->
+                        </select>
+                    </div>
+
+                    <!-- Q3: Prioritise (Weighted 3x) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">3. Above all else, you prioritise... (3x Weight)</label>
+                        <select name="prioritise" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            <option value="Design that stands out">Design that stands out</option>
+                            <option value="Features and modern tech">Features and modern tech</option>
+                            <option value="Comfort and space">Comfort and space</option>
+                            <option value="The essentials, done right">The essentials, done right</option>
+                        </select>
+                    </div>
+
+                    <!-- Q4: Typical Driving Day (Weighted 2x) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">4. What's your typical driving day? (2x Weight)</label>
+                        <select name="drivingDay" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            <option value="City commutes and short trips">City commutes and short trips</option>
+                            <option value="Always on-the-go with kids">Always on-the-go with kids</option>
+                            <option value="High mileage motorway driving">High mileage motorway driving</option>
+                        </select>
+                    </div>
+
+                    <!-- Q5: High-end features (Weighted 1x per match) -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">5. What high-end features, if any, do you look for? (1x Weight per Match. Note: Towing is a filter)</label>
+                        <div class="space-y-2 mt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Panoramic sunroof" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Panoramic sunroof</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="High-end audio system" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">High-end audio system</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Exciting colourways" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Exciting colourways</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Capable of towing above 700 KGs" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Capable of towing above 700 KGs (Filter)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full primary-btn text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg mt-4">
+                        Find My Perfect Match
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Panel -->
+            <div id="results" class="card p-6 md:p-8">
+                <h2 class="text-2xl font-bold mb-6 text-gray-700">Recommended Models</h2>
+                <div id="results-container" class="space-y-4">
+                    <p class="text-gray-500 text-center py-4">Select your answers and click "Find My Perfect Match" to see the ranked recommendations.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // --- 1. CAR MODEL DATA ---
+        // This array now includes 10 models based on the structure of your CSV files.
+        // Data is simplified to include only the necessary scoring attributes.
+        const CAR_MODELS = [
+            // Clio
+            { name: "Clio", capacity: "1-2", vibe: "Small, nimble, practical", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways"], towingWeight: 900, description: "Compact and efficient city car." },
+            // R5 e-Tech Electric
+            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: "Mid-sized, compact, fun", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways"], towingWeight: 500, description: "Fun, electric hatchback with bold design." },
+            // R4 e-Tech Electric
+            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: "Mid-sized, compact, fun", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system"], towingWeight: 750, description: "Rugged electric crossover." },
+            // Captur
+            { name: "Captur", capacity: "2-4", vibe: "Mid-sized, SUV-style, sleek", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, description: "Small SUV, versatile and connected." },
+            // Symbioz
+            { name: "Symbioz", capacity: "2-4", vibe: "Mid-sized, SUV-style, sleek", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system"], towingWeight: 1000, description: "Mid-sized family SUV." },
+            // Megane
+            { name: "Megane", capacity: "2-4", vibe: "Mid-sized, compact, fun", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack"], towingWeight: 750, description: "Sporty electric hatchback." },
+            // Scenic
+            { name: "Scenic", capacity: "5", vibe: "Spacious, family-friendly", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, description: "Large, electric family SUV." },
+            // Rafale
+            { name: "Rafale", capacity: "5", vibe: "Spacious, family-friendly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, description: "Coupe SUV with focus on design." },
+            // Austral
+            { name: "Austral", capacity: "5", vibe: "Spacious, family-friendly", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, description: "Premium SUV with hybrid technology." },
+            // Twingo
+            { name: "Twingo", capacity: "1-2", vibe: "Small, nimble, practical", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: [], towingWeight: 0, description: "Electric city car." }
+        ];
+
+        // --- 2. DYNAMIC MAPPING DATA ---
+        // Maps the capacity (Q1) to the distinct vibe options (Q2) available in that category.
+        const CAPACITY_TO_VIBES = {
+            "1-2": [
+                "Small, nimble, practical"
+            ],
+            "2-4": [
+                "Mid-sized, compact, fun",
+                "Mid-sized, SUV-style, sleek"
+            ],
+            "5": [
+                "Spacious, family-friendly"
+            ]
+        };
+        
+        // --- 3. DYNAMIC UI LOGIC ---
+
+        function updateVibeOptions() {
+            const peopleSelect = document.getElementById('people-select');
+            const vibeSelect = document.getElementById('vibe-select');
+            const selectedCapacity = peopleSelect.value;
+            
+            // Get the relevant vibe options for the selected capacity
+            const vibes = CAPACITY_TO_VIBES[selectedCapacity] || [];
+
+            // Clear existing options
+            vibeSelect.innerHTML = '';
+            
+            // Populate new options
+            if (vibes.length > 0) {
+                vibes.forEach(vibe => {
+                    const option = document.createElement('option');
+                    option.value = vibe;
+                    option.textContent = vibe;
+                    vibeSelect.appendChild(option);
+                });
+            } else {
+                 const option = document.createElement('option');
+                 option.textContent = "No Vibe options available";
+                 vibeSelect.appendChild(option);
+            }
+        }
+
+
+        // --- 4. SCORING LOGIC ---
+
+        function calculateScore(userInput) {
+            let rankedModels = [];
+
+            CAR_MODELS.forEach(model => {
+                let score = 0;
+                let isFiltered = false;
+                let matchDetails = [];
+
+                // --- A. FILTERS (Pass/Fail) ---
+                
+                // F1: People Capacity Filter (Strictly enforced by Q2's dynamic options, but kept here for robustness)
+                if (model.capacity !== userInput.people) {
+                    isFiltered = true;
+                    matchDetails.push({ key: "People", isMatch: false, reason: `Needs ${userInput.people} but model has ${model.capacity}` });
+                } else {
+                    matchDetails.push({ key: "People", isMatch: true, reason: `Matches capacity (${model.capacity})` });
+                }
+
+                // F2: Car Vibe Filter (Strict match)
+                if (model.vibe !== userInput.vibe) {
+                    isFiltered = true;
+                    matchDetails.push({ key: "Vibe", isMatch: false, reason: `User wants "${userInput.vibe}" but model is "${model.vibe}"` });
+                } else {
+                     matchDetails.push({ key: "Vibe", isMatch: true, reason: `Matches vibe: "${model.vibe}"` });
+                }
+
+                // F3: Towing Filter (Logic: If user asks for towing, model must have > 700kg listed)
+                const wantsTowing = userInput.features.includes("Capable of towing above 700 KGs");
+                if (wantsTowing && model.towingWeight < 700) {
+                    isFiltered = true;
+                    matchDetails.push({ key: "Towing", isMatch: false, reason: `Requires towing > 700kg, model has ${model.towingWeight}kg` });
+                } else if (wantsTowing && model.towingWeight >= 700) {
+                    matchDetails.push({ key: "Towing", isMatch: true, reason: `Towing match (has ${model.towingWeight}kg)` });
+                } else if (!wantsTowing) {
+                    // If user doesn't want towing, it's not a filter
+                    matchDetails.push({ key: "Towing", isMatch: true, reason: "Towing not required by user" });
+                }
+
+
+                // If the model is filtered, skip scoring
+                if (isFiltered) {
+                    rankedModels.push({ model: model.name, score: -1, isFiltered: true, matchDetails, description: model.description });
+                    return;
+                }
+                
+                // --- B. WEIGHTED SCORING (Only for non-filtered models) ---
+
+                // W1: Prioritise (3x Weight)
+                if (model.prioritise === userInput.prioritise) {
+                    score += 3;
+                    matchDetails.push({ key: "Prioritise (3x)", isMatch: true, reason: `Matched priority: "${model.prioritise}" (+3 pts)` });
+                } else {
+                    matchDetails.push({ key: "Prioritise (3x)", isMatch: false, reason: `Mismatched priority: User wants "${userInput.prioritise}"` });
+                }
+
+                // W2: Driving Day (2x Weight)
+                if (model.drivingDay === userInput.drivingDay) {
+                    score += 2;
+                    matchDetails.push({ key: "Driving Day (2x)", isMatch: true, reason: `Matched driving day: "${model.drivingDay}" (+2 pts)` });
+                } else {
+                    matchDetails.push({ key: "Driving Day (2x)", isMatch: false, reason: `Mismatched driving day: User wants "${userInput.drivingDay}"` });
+                }
+
+                // W3: High-end Features (1x Weight per match)
+                let featureMatches = 0;
+                // Filter out the 'towing' feature from the user input since it was handled as a filter
+                const userFeatures = userInput.features.filter(f => f !== "Capable of towing above 700 KGs");
+                
+                userFeatures.forEach(userFeature => {
+                    if (model.features.includes(userFeature)) {
+                        score += 1;
+                        featureMatches++;
+                        matchDetails.push({ key: `Feature: ${userFeature} (1x)`, isMatch: true, reason: `Feature included (+1 pt)` });
+                    }
+                });
+
+                if (userFeatures.length > 0) {
+                    matchDetails.push({ 
+                        key: "Feature Score", 
+                        isMatch: featureMatches > 0, 
+                        reason: `Total features matched: ${featureMatches} out of ${userFeatures.length} (+${featureMatches} pts)` 
+                    });
+                }
+
+
+                // Final Model Data
+                rankedModels.push({
+                    model: model.name,
+                    score: score,
+                    isFiltered: false,
+                    matchDetails,
+                    description: model.description
+                });
+            });
+
+            // Sort models: Highest score first. Filtered models (score = -1) will automatically go to the bottom.
+            rankedModels.sort((a, b) => b.score - a.score);
+
+            return rankedModels;
+        }
+
+        // --- 5. UI RENDERING ---
+
+        function renderResults(results) {
+            const container = document.getElementById('results-container');
+            container.innerHTML = '';
+
+            const passedModels = results.filter(r => !r.isFiltered);
+            const filteredModels = results.filter(r => r.isFiltered);
+
+            if (passedModels.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
+                        <p class="font-semibold text-red-700">No models passed the essential filters.</p>
+                        <p class="text-sm text-red-600 mt-1">Check the Towing filter! Since Q1 and Q2 are linked, towing is the most likely cause of a full filter.</p>
+                    </div>
+                `;
+            } else {
+                // Render Passed Models
+                container.innerHTML += '<h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">Recommended & Scored Models</h3>';
+                passedModels.forEach((result, index) => {
+                    container.innerHTML += createModelCard(result, index + 1);
+                });
+
+                // Render Filtered Models
+                if (filteredModels.length > 0) {
+                    container.innerHTML += `
+                        <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3 border-b pb-2">Filtered Out Models (${filteredModels.length})</h3>
+                    `;
+                    filteredModels.forEach(result => {
+                        container.innerHTML += createFilteredCard(result);
+                    });
+                }
+            }
+        }
+
+        function createModelCard(result, rank) {
+            const totalScore = 3 + 2 + 3; // Max theoretical score: Prioritise(3) + Day(2) + Features(3)
+            const percentage = ((result.score / totalScore) * 100).toFixed(0);
+
+            let detailsHtml = result.matchDetails.map(detail => `
+                <li class="flex items-start text-xs ${detail.isMatch ? 'text-green-700' : 'text-red-700'}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 mt-0.5 flex-shrink-0 ${detail.isMatch ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        ${detail.isMatch ? '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />' : '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />'}
+                    </svg>
+                    <span><strong>${detail.key}:</strong> ${detail.reason}</span>
+                </li>
+            `).join('');
+
+
+            return `
+                <div class="result-item p-4 border border-gray-200 rounded-lg transition duration-200 bg-white">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-lg font-bold w-6 h-6 flex items-center justify-center rounded-full ${rank === 1 ? 'bg-yellow-400 text-gray-800' : 'bg-gray-100 text-gray-600'}">${rank}</span>
+                            <h4 class="text-xl font-extrabold text-gray-800">${result.model}</h4>
+                            <span class="match-badge px-2 py-0.5 text-xs font-semibold rounded-full">${percentage}% Suitability</span>
+                        </div>
+                        <div class="text-2xl font-bold text-red-600">${result.score} pts</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-3">${result.description}</p>
+                    
+                    <details class="mt-2">
+                        <summary class="text-sm font-semibold text-gray-600 cursor-pointer hover:text-red-600">
+                            View Detailed Scoring Breakdown
+                        </summary>
+                        <ul class="mt-2 pl-2 space-y-1">
+                            ${detailsHtml}
+                        </ul>
+                    </details>
+                </div>
+            `;
+        }
+
+        function createFilteredCard(result) {
+            const filterFailures = result.matchDetails.filter(d => (d.key === 'People' || d.key === 'Vibe' || d.key === 'Towing') && !d.isMatch);
+            const failureReason = filterFailures.map(f => f.reason).join('; ');
+
+            return `
+                <div class="result-item p-3 border-l-4 border-red-400 rounded-lg bg-red-50 flex justify-between items-center">
+                    <div>
+                        <h4 class="text-lg font-semibold text-red-800">${result.model}</h4>
+                        <p class="text-xs text-red-600 mt-0.5">FILTERED: ${failureReason}</p>
+                    </div>
+                    <span class="text-sm font-medium text-red-500">Excluded</span>
+                </div>
+            `;
+        }
+
+        // --- 6. EVENT HANDLER & INITIALIZATION ---
+
+        document.getElementById('car-quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            
+            // Collect user input from the form
+            const userInput = {
+                people: form.elements.people.value,
+                vibe: form.elements.vibe.value,
+                prioritise: form.elements.prioritise.value,
+                drivingDay: form.elements.drivingDay.value,
+                features: Array.from(form.elements.features)
+                            .filter(checkbox => checkbox.checked)
+                            .map(checkbox => checkbox.value)
+            };
+
+            const results = calculateScore(userInput);
+            renderResults(results);
+        });
+
+        // Initialize Vibe options on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateVibeOptions();
+            document.getElementById('results-container').innerHTML = `
+                <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                    <p class="font-semibold text-gray-600">Input your preferences on the left to start the scoring validation.</p>
+                    <p class="text-sm text-gray-500 mt-1">Note: The Vibe options now change based on the "People" selection to prevent early filtering!</p>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

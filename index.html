@@ -62,22 +62,37 @@
                 <h2 class="text-2xl font-bold mb-6 text-gray-700">User Profile</h2>
                 <form id="car-quiz-form" class="space-y-6">
 
-                    <!-- Q1: How many people -->
+                    <!-- Q1: How many people (FILTER) -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">1. How many people (and/or dogs!) are typically in your car? (Filter)</label>
-                        <select name="people" id="people-select" onchange="updateVibeOptions()" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                        <select name="people" id="people-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="1-2">1-2</option>
                             <option value="2-4">2-4</option>
                             <option value="5">5</option>
                         </select>
                     </div>
 
-                    <!-- Q2: Perfect Car Vibe (Dynamically Populated) -->
+                    <!-- Q2: Perfect Car Vibe (MULTIPLE CHOICE - Score 1x per match, Max 2 pts) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">2. What car feels right to you? (Filter)</label>
-                        <select name="vibe" id="vibe-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                            <!-- Options populated by JavaScript based on Q1 -->
-                        </select>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">2. What car feels right to you? (Score 1x per match)</label>
+                        <div class="space-y-2 mt-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="vibe" value="Small, nimble, practical" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Small, nimble, practical (City cars)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="vibe" value="Mid-sized, compact, fun" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Mid-sized, compact, fun (Hatchbacks)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="vibe" value="Mid-sized, SUV-style, sleek" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Mid-sized, SUV-style, sleek (Compact SUVs)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="vibe" value="Spacious, family-friendly" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Spacious, family-friendly (Large SUVs/Crossovers)</span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Q3: Driving Distance Frequency (Weighted 3x) -->
@@ -164,68 +179,38 @@
 
     <script>
         // --- 1. CAR MODEL DATA ---
-        // Max Score: 3(LDF) + 3(P) + 2(DD) + 3(F) + 2(CA) = 13 points
+        // Max Score: 15 points (Q2 max 2, Q3 max 3, Q4 max 3, Q5 max 2, Q6 max 3, Q7 max 2)
         const CAR_MODELS = [
+            // Note: 'vibe' is now an array to allow for multiple matching tags.
             // Clio
-            { name: "Clio", capacity: "1-2", vibe: "Small, nimble, practical", longDistanceFrequency: "Weekly", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways"], towingWeight: 900, chargingAccess: "No", description: "Compact and efficient city car (Petrol/Hybrid)." },
+            { name: "Clio", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Weekly", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways"], towingWeight: 900, chargingAccess: "No", description: "Compact and efficient city car (Petrol/Hybrid)." },
             // R5 e-Tech Electric
-            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: "Mid-sized, compact, fun", longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways"], towingWeight: 500, chargingAccess: "At home", description: "Fun, electric hatchback with bold design." },
+            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways"], towingWeight: 500, chargingAccess: "At home", description: "Fun, electric hatchback with bold design." },
             // R4 e-Tech Electric
-            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: "Mid-sized, compact, fun", longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system"], towingWeight: 750, chargingAccess: "At work", description: "Rugged electric crossover." },
-            // Captur
-            { name: "Captur", capacity: "2-4", vibe: "Mid-sized, SUV-style, sleek", longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
+            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system"], towingWeight: 750, chargingAccess: "At work", description: "Rugged electric crossover." },
+            // Captur - Max 2 Vibe points
+            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
             // Symbioz
-            { name: "Symbioz", capacity: "2-4", vibe: "Mid-sized, SUV-style, sleek", longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system"], towingWeight: 1000, chargingAccess: "At home", description: "Mid-sized family SUV (Hybrid/Petrol)." },
+            { name: "Symbioz", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system"], towingWeight: 1000, chargingAccess: "At home", description: "Mid-sized family SUV (Hybrid/Petrol)." },
             // Megane
-            { name: "Megane", capacity: "2-4", vibe: "Mid-sized, compact, fun", longDistanceFrequency: "Weekly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack"], towingWeight: 750, chargingAccess: "At home", description: "Sporty electric hatchback." },
-            // Scenic
-            { name: "Scenic", capacity: "5", vibe: "Spacious, family-friendly", longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At home", description: "Large, electric family SUV." },
+            { name: "Megane", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Weekly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack"], towingWeight: 750, chargingAccess: "At home", description: "Sporty electric hatchback." },
+            // Scenic - Max 2 Vibe points
+            { name: "Scenic", capacity: "5", vibe: ["Spacious, family-friendly", "Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At home", description: "Large, electric family SUV." },
             // Rafale
-            { name: "Rafale", capacity: "5", vibe: "Spacious, family-friendly", longDistanceFrequency: "Daily", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At work", description: "Coupe SUV with focus on design (Hybrid/Petrol)." },
+            { name: "Rafale", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At work", description: "Coupe SUV with focus on design (Hybrid/Petrol)." },
             // Austral
-            { name: "Austral", capacity: "5", vibe: "Spacious, family-friendly", longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "Not currently, but I could install at home", description: "Premium SUV with hybrid technology." },
+            { name: "Austral", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "Not currently, but I could install at home", description: "Premium SUV with hybrid technology." },
             // Twingo
-            { name: "Twingo", capacity: "1-2", vibe: "Small, nimble, practical", longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: [], towingWeight: 0, chargingAccess: "At home", description: "Electric city car." }
+            { name: "Twingo", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: [], towingWeight: 0, chargingAccess: "At home", description: "Electric city car." }
         ];
 
-        // --- 2. DYNAMIC MAPPING DATA ---
-        // Maps the capacity (Q1) to the distinct vibe options (Q2) available in that category.
-        const CAPACITY_TO_VIBES = {
-            "1-2": [
-                "Small, nimble, practical"
-            ],
-            "2-4": [
-                "Mid-sized, compact, fun",
-                "Mid-sized, SUV-style, sleek"
-            ],
-            "5": [
-                "Spacious, family-friendly"
-            ]
-        };
+        // --- 2. DYNAMIC MAPPING DATA (Removed as Q2 is no longer dynamic) ---
         
-        // --- 3. DYNAMIC UI LOGIC ---
+        // --- 3. DYNAMIC UI LOGIC (Removed as Q2 is no longer dynamic) ---
 
         function updateVibeOptions() {
-            const peopleSelect = document.getElementById('people-select');
-            const vibeSelect = document.getElementById('vibe-select');
-            const selectedCapacity = peopleSelect.value;
-            
-            const vibes = CAPACITY_TO_VIBES[selectedCapacity] || [];
-
-            vibeSelect.innerHTML = '';
-            
-            if (vibes.length > 0) {
-                vibes.forEach(vibe => {
-                    const option = document.createElement('option');
-                    option.value = vibe;
-                    option.textContent = vibe;
-                    vibeSelect.appendChild(option);
-                });
-            } else {
-                 const option = document.createElement('option');
-                 option.textContent = "No Vibe options available";
-                 vibeSelect.appendChild(option);
-            }
+            // Function no longer needed, retained as a placeholder function name to avoid console errors 
+            // if the onchange event is still mistakenly referenced.
         }
 
 
@@ -241,7 +226,7 @@
 
                 // --- A. FILTERS (Pass/Fail) ---
                 
-                // F1: People Capacity Filter
+                // F1: People Capacity Filter (STILL A FILTER)
                 if (model.capacity !== userInput.people) {
                     isFiltered = true;
                     matchDetails.push({ key: "People", isMatch: false, reason: `Needs ${userInput.people} but model has ${model.capacity}` });
@@ -249,15 +234,7 @@
                     matchDetails.push({ key: "People", isMatch: true, reason: `Matches capacity (${model.capacity})` });
                 }
 
-                // F2: Car Vibe Filter
-                if (model.vibe !== userInput.vibe) {
-                    isFiltered = true;
-                    matchDetails.push({ key: "Vibe", isMatch: false, reason: `User wants "${userInput.vibe}" but model is "${model.vibe}"` });
-                } else {
-                     matchDetails.push({ key: "Vibe", isMatch: true, reason: `Matches vibe: "${model.vibe}"` });
-                }
-
-                // F3: Towing Filter
+                // F2: Towing Filter (STILL A FILTER)
                 const wantsTowing = userInput.features.includes("Capable of towing above 700 KGs");
                 if (wantsTowing && model.towingWeight < 700) {
                     isFiltered = true;
@@ -275,9 +252,19 @@
                     return;
                 }
                 
-                // --- B. WEIGHTED SCORING (Max Score = 13 points) ---
+                // --- B. WEIGHTED SCORING (Max Score = 15 points) ---
                 
-                // W1: Distance Frequency (3x Weight)
+                // W1: Vibe Score (1x Weight per match, Max 2 points) - NEW SCORING
+                let vibeMatches = 0;
+                userInput.vibe.forEach(userVibe => {
+                    if (model.vibe.includes(userVibe)) {
+                        score += 1;
+                        vibeMatches++;
+                    }
+                });
+                matchDetails.push({ key: "Vibe Match (1x per)", isMatch: vibeMatches > 0, reason: `Matched ${vibeMatches} Vibe tags (+${vibeMatches} pts)` });
+
+                // W2: Distance Frequency (3x Weight)
                 if (model.longDistanceFrequency === userInput.longDistanceFrequency) {
                     score += 3;
                     matchDetails.push({ key: "Distance Freq. (3x)", isMatch: true, reason: `Matched frequency: "${model.longDistanceFrequency}" (+3 pts)` });
@@ -285,7 +272,7 @@
                     matchDetails.push({ key: "Distance Freq. (3x)", isMatch: false, reason: `Mismatched frequency: User wants "${userInput.longDistanceFrequency}"` });
                 }
 
-                // W2: Prioritise (3x Weight)
+                // W3: Prioritise (3x Weight)
                 if (model.prioritise === userInput.prioritise) {
                     score += 3;
                     matchDetails.push({ key: "Prioritise (3x)", isMatch: true, reason: `Matched priority: "${model.prioritise}" (+3 pts)` });
@@ -293,20 +280,12 @@
                     matchDetails.push({ key: "Prioritise (3x)", isMatch: false, reason: `Mismatched priority: User wants "${userInput.prioritise}"` });
                 }
 
-                // W3: Driving Day (2x Weight)
+                // W4: Driving Day (2x Weight)
                 if (model.drivingDay === userInput.drivingDay) {
                     score += 2;
                     matchDetails.push({ key: "Driving Day (2x)", isMatch: true, reason: `Matched driving day: "${model.drivingDay}" (+2 pts)` });
                 } else {
                     matchDetails.push({ key: "Driving Day (2x)", isMatch: false, reason: `Mismatched driving day: User wants "${userInput.drivingDay}"` });
-                }
-
-                // W4: Charging Access (2x Weight)
-                if (model.chargingAccess === userInput.chargingAccess) {
-                    score += 2;
-                    matchDetails.push({ key: "Charging Access (2x)", isMatch: true, reason: `Matched access: "${model.chargingAccess}" (+2 pts)` });
-                } else {
-                    matchDetails.push({ key: "Charging Access (2x)", isMatch: false, reason: `Mismatched access: User wants "${userInput.chargingAccess}"` });
                 }
 
                 // W5: High-end Features (1x Weight per match - Max 3 features)
@@ -328,6 +307,13 @@
                     reason: `Total features matched: ${featureMatches} out of ${userFeatures.length} (+${featureMatches} pts)` 
                 });
                 
+                // W6: Charging Access (2x Weight)
+                if (model.chargingAccess === userInput.chargingAccess) {
+                    score += 2;
+                    matchDetails.push({ key: "Charging Access (2x)", isMatch: true, reason: `Matched access: "${model.chargingAccess}" (+2 pts)` });
+                } else {
+                    matchDetails.push({ key: "Charging Access (2x)", isMatch: false, reason: `Mismatched access: User wants "${userInput.chargingAccess}"` });
+                }
 
 
                 // Final Model Data
@@ -359,7 +345,7 @@
                 container.innerHTML = `
                     <div class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
                         <p class="font-semibold text-red-700">No models passed the essential filters.</p>
-                        <p class="text-sm text-red-600 mt-1">Check the Towing filter! Since Q1 and Q2 are linked, towing is the most likely cause of a full filter.</p>
+                        <p class="text-sm text-red-600 mt-1">Only the People (Q1) and Towing (Q6 checkbox) questions act as filters now. Please check these options.</p>
                     </div>
                 `;
             } else {
@@ -382,7 +368,7 @@
         }
 
         function createModelCard(result, rank) {
-            const totalScore = 13; // Max theoretical score is now 13
+            const totalScore = 15; // Max theoretical score is now 15
             const percentage = ((result.score / totalScore) * 100).toFixed(0);
 
             let detailsHtml = result.matchDetails.map(detail => `
@@ -420,7 +406,7 @@
         }
 
         function createFilteredCard(result) {
-            const filterFailures = result.matchDetails.filter(d => (d.key === 'People' || d.key === 'Vibe' || d.key === 'Towing') && !d.isMatch);
+            const filterFailures = result.matchDetails.filter(d => (d.key === 'People' || d.key === 'Towing') && !d.isMatch);
             const failureReason = filterFailures.map(f => f.reason).join('; ');
 
             return `
@@ -444,7 +430,9 @@
             // Collect user input from the form
             const userInput = {
                 people: form.elements.people.value,
-                vibe: form.elements.vibe.value,
+                vibe: Array.from(form.elements.vibe) // Q2 is now array of checked values
+                        .filter(checkbox => checkbox.checked)
+                        .map(checkbox => checkbox.value),
                 longDistanceFrequency: form.elements.longDistanceFrequency.value, // Q3
                 prioritise: form.elements.prioritise.value, // Q4
                 drivingDay: form.elements.drivingDay.value, // Q5
@@ -458,13 +446,12 @@
             renderResults(results);
         });
 
-        // Initialize Vibe options on page load
+        // Initialization now only sets the placeholder text, as Q2 is no longer dynamic
         document.addEventListener('DOMContentLoaded', () => {
-            updateVibeOptions();
             document.getElementById('results-container').innerHTML = `
                 <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
                     <p class="font-semibold text-gray-600">Input your preferences on the left to start the scoring validation.</p>
-                    <p class="text-sm text-gray-500 mt-1">Total score is now based on 7 questions for a maximum of 13 points!</p>
+                    <p class="text-sm text-gray-500 mt-1">Q2 (Vibe) is now multiple choice and contributes 1 point per match to the score! Total score is now based on a maximum of 15 points.</p>
                 </div>
             `;
         });

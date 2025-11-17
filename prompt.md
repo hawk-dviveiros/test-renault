@@ -31,21 +31,23 @@ Certain questions act as hard filters, immediately disqualifying models that do 
 
 **Weighted Scoring**
 
-After filtering, the remaining models are scored based on a weighted system. The maximum possible score is **19 points**.
+After filtering, the remaining models are scored based on a weighted system. The maximum possible score is **12 points**.
 
-*   **Q2: Perfect Car Vibe (1 point per match):** Users can select multiple "vibes". For each selected vibe that matches a car model's `vibe` array, 1 point is added to the score.
+*   **Q2: Perfect Car Vibe (1 point per match):** Users can select multiple "vibes". For each selected vibe that matches a car model's `vibe` array, **1 point** is added to the score.
 
-*   **Q3: Driving Distance Frequency (6 points):** This is a heavily weighted question. If the user's selection matches the model's `longDistanceFrequency`, the model receives 6 points.
+*   **Q3: Driving Distance Frequency (2 points):** If the user's selection matches the model's `longDistanceFrequency`, the model receives **2 points**.
 
-*   **Q4: Prioritise (3 points):** If the user's selection for their main priority matches the model's `prioritise` attribute, the model receives 3 points.
+*   **Q4: Prioritise (1 point):** If the user's selection for their main priority matches the model's `prioritise` attribute, the model receives **1 point**.
 
-*   **Q5: Typical Driving Day (2 points):** If the user's selection for their typical driving day matches the model's `drivingDay`, the model receives 2 points.
+*   **Q5: Typical Driving Day (1 point):** If the user's selection for their typical driving day matches the model's `drivingDay`, the model receives **1 point**.
 
-*   **Q6: High-end Features (2 points per match):** This is another heavily weighted category. For each selected high-end feature (excluding the towing option, which is a filter) that the model has, the model receives 2 points.
+*   **Q6: High-end Features (2 points per match):** For each selected high-end feature (excluding the towing option, which is a filter) that the model has, the model receives **2 points**.
 
 **Car Models**
 
-The application includes a predefined list of car models stored in a JavaScript array in `index.html`. Each model object has several attributes, including `capacity`, `vibe`, `features`, `towingWeight`, and a new boolean attribute `isElectric` to identify if the model is fully electric.
+The application includes a predefined list of car models stored in a JavaScript array in `index.html`. Each model object has several attributes, including `capacity`, `vibe`, `features`, `towingWeight`, and a boolean attribute `isElectric`.
+
+*Data Correction:* The `drivingDay` attribute for the **Captur** model was corrected to "Always on-the-go with kids" to ensure accurate matching.
 
 **File Structure**
 

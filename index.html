@@ -95,9 +95,9 @@
                         </div>
                     </div>
 
-                    <!-- Q3: Driving Distance Frequency (Weighted 6x) -->
+                    <!-- Q3: Driving Distance Frequency (Weighted 2x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">3. How often do you drive +600 miles? (6x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">3. How often do you drive +X miles? (2x Weight)</label>
                         <select name="longDistanceFrequency" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Daily">Daily</option>
                             <option value="Weekly">Weekly</option>
@@ -106,9 +106,9 @@
                         </select>
                     </div>
 
-                    <!-- Q4: Prioritise (Weighted 3x) -->
+                    <!-- Q4: Prioritise (Weighted 1x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">4. Above all else, you prioritise... (3x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">4. Above all else, you prioritise... (1x Weight)</label>
                         <select name="prioritise" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Design that stands out">Design that stands out</option>
                             <option value="Features and modern tech">Features and modern tech</option>
@@ -117,9 +117,9 @@
                         </select>
                     </div>
 
-                    <!-- Q5: Typical Driving Day (Weighted 2x) -->
+                    <!-- Q5: Typical Driving Day (Weighted 1x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">5. What's your typical driving day? (2x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">5. What's your typical driving day? (1x Weight)</label>
                         <select name="drivingDay" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="City commutes and short trips">City commutes and short trips</option>
                             <option value="Always on-the-go with kids">Always on-the-go with kids</option>
@@ -187,7 +187,7 @@
             // R4 e-Tech Electric
             { name: "R4 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system"], towingWeight: 750, chargingAccess: "At work", isElectric: true, description: "Rugged electric crossover." },
             // Captur
-            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
+            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "Always on-the-go with kids", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
             // Symbioz
             { name: "Symbioz", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system"], towingWeight: 1000, chargingAccess: "At home", isElectric: false, description: "Mid-sized family SUV (Hybrid/Petrol)." },
             // Megane
@@ -274,28 +274,28 @@
                 });
                 matchDetails.push({ key: "Vibe Match (1x per)", isMatch: vibeMatches > 0, reason: `Matched ${vibeMatches} Vibe tags (+${vibeMatches} pts)` });
 
-                // W2: Distance Frequency (6x Weight)
+                // W2: Distance Frequency (2x Weight)
                 if (model.longDistanceFrequency === userInput.longDistanceFrequency) {
-                    score += 6;
-                    matchDetails.push({ key: "Distance Freq. (6x)", isMatch: true, reason: `Matched frequency: "${model.longDistanceFrequency}" (+6 pts)` });
-                } else {
-                    matchDetails.push({ key: "Distance Freq. (6x)", isMatch: false, reason: `Mismatched frequency: User wants "${userInput.longDistanceFrequency}"` });
-                }
-
-                // W3: Prioritise (3x Weight)
-                if (model.prioritise === userInput.prioritise) {
-                    score += 3;
-                    matchDetails.push({ key: "Prioritise (3x)", isMatch: true, reason: `Matched priority: "${model.prioritise}" (+3 pts)` });
-                } else {
-                    matchDetails.push({ key: "Prioritise (3x)", isMatch: false, reason: `Mismatched priority: User wants "${userInput.prioritise}"` });
-                }
-
-                // W4: Driving Day (2x Weight)
-                if (model.drivingDay === userInput.drivingDay) {
                     score += 2;
-                    matchDetails.push({ key: "Driving Day (2x)", isMatch: true, reason: `Matched driving day: "${model.drivingDay}" (+2 pts)` });
+                    matchDetails.push({ key: "Distance Freq. (2x)", isMatch: true, reason: `Matched frequency: "${model.longDistanceFrequency}" (+2 pts)` });
                 } else {
-                    matchDetails.push({ key: "Driving Day (2x)", isMatch: false, reason: `Mismatched driving day: User wants "${userInput.drivingDay}"` });
+                    matchDetails.push({ key: "Distance Freq. (2x)", isMatch: false, reason: `Mismatched frequency: User wants "${userInput.longDistanceFrequency}"` });
+                }
+
+                // W3: Prioritise (1x Weight)
+                if (model.prioritise === userInput.prioritise) {
+                    score += 1;
+                    matchDetails.push({ key: "Prioritise (1x)", isMatch: true, reason: `Matched priority: "${model.prioritise}" (+1 pt)` });
+                } else {
+                    matchDetails.push({ key: "Prioritise (1x)", isMatch: false, reason: `Mismatched priority: User wants "${userInput.prioritise}"` });
+                }
+
+                // W4: Driving Day (1x Weight)
+                if (model.drivingDay === userInput.drivingDay) {
+                    score += 1;
+                    matchDetails.push({ key: "Driving Day (1x)", isMatch: true, reason: `Matched driving day: "${model.drivingDay}" (+1 pt)` });
+                } else {
+                    matchDetails.push({ key: "Driving Day (1x)", isMatch: false, reason: `Mismatched driving day: User wants "${userInput.drivingDay}"` });
                 }
 
                 // W5: High-end Features (2x Weight per match)
@@ -317,8 +317,6 @@
                     reason: `Total features matched: ${featureMatches} out of ${userFeatures.length} (+${featureMatches * 2} pts)` 
                 });
                 
-                // W6: Charging Access (2x Weight) - This is no longer a scoring attribute
-
 
                 // Final Model Data
                 rankedModels.push({
@@ -372,7 +370,7 @@
         }
 
         function createModelCard(result, rank) {
-            const totalScore = 21; // Max theoretical score is now 21
+            const totalScore = 12; // Max theoretical score is now 12
             const percentage = ((result.score / totalScore) * 100).toFixed(0);
 
             let detailsHtml = result.matchDetails.map(detail => `
@@ -455,7 +453,7 @@
             document.getElementById('results-container').innerHTML = `
                 <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
                     <p class="font-semibold text-gray-600">Input your preferences on the left to start the scoring validation.</p>
-                    <p class="text-sm text-gray-500 mt-1">Q2 (Vibe) is now multiple choice and contributes 1 point per match to the score! Total score is now based on a maximum of 15 points.</p>
+                    <p class="text-sm text-gray-500 mt-1">Total score is now based on a maximum of 12 points.</p>
                 </div>
             `;
         });

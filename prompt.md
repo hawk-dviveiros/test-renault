@@ -10,7 +10,7 @@ The user answers a series of questions about their lifestyle and preferences, in
 *   Preferred car "vibe"
 *   Driving distance frequency
 *   Priorities (design, tech, comfort, etc.)
-*   Typical driving day
+*   Typical driving day (options include "City commutes and short trips", "Always on-the-go with kids", "High mileage motorway driving", and "Light driving here and there")
 *   Desired high-end features
 *   Access to a charging point
 

@@ -204,28 +204,148 @@
 
     <script>
         // --- 1. CAR MODEL DATA ---
-        const CAR_MODELS = [
-            // Clio
-            { name: "Clio", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Weekly", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways", "High-end on-board tech"], towingWeight: 900, chargingAccess: "No", isElectric: false, description: "Compact and efficient city car (Petrol/Hybrid)." },
-            // R5 e-Tech Electric
-            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways", "High-end on-board tech"], towingWeight: 500, chargingAccess: "At home", isElectric: true, description: "Fun, electric hatchback with bold design." },
-            // R4 e-Tech Electric
-            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Bike rack"], towingWeight: 750, chargingAccess: "At work", isElectric: true, description: "Rugged electric crossover." },
-            // Captur
-            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "Always on-the-go with kids", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
-            // Symbioz
-            { name: "Symbioz", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "High-end on-board tech"], towingWeight: 1000, chargingAccess: "At home", isElectric: false, description: "Mid-sized family SUV (Hybrid/Petrol)." },
-            // Megane
-            { name: "Megane", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Weekly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack", "Sporty add-ons"], towingWeight: 750, chargingAccess: "At home", isElectric: true, description: "Sporty electric hatchback." },
-            // Scenic
-            { name: "Scenic", capacity: "5", vibe: ["Spacious, family-friendly", "Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"], towingWeight: 1500, chargingAccess: "At home", isElectric: true, description: "Large, electric family SUV." },
-            // Rafale
-            { name: "Rafale", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Sporty add-ons"], towingWeight: 1500, chargingAccess: "At work", isElectric: false, description: "Coupe SUV with focus on design (Hybrid/Petrol)." },
-            // Austral
-            { name: "Austral", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Equipment customisation"], towingWeight: 1500, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Premium SUV with hybrid technology." },
-            // Twingo
-            { name: "Twingo", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["Exciting colourways"], towingWeight: 0, chargingAccess: "At home", isElectric: true, description: "Electric city car." }
-        ];
+        const CAR_MODELS = const CAR_MODELS = [
+                                    // Clio
+                                    {
+                                        name: "Clio",
+                                        capacity: "1-2",
+                                        vibe: ["Small, nimble, practical"],
+                                        longDistanceFrequency: "Weekly",
+                                        prioritise: "The essentials, done right",
+                                        drivingDay: "Always on-the-go with kids",
+                                        features: ["Exciting colourways"],
+                                        towingWeight: 900,
+                                        chargingAccess: "No",
+                                        isElectric: false,
+                                        description: "Compact and efficient city car (Petrol/Hybrid)."
+                                    },
+                                    // R5 e-Tech Electric
+                                    {
+                                        name: "R5 e-Tech Electric",
+                                        capacity: "2-4",
+                                        vibe: ["Small-mid, compact, fun", "Small, nimble, practical"],
+                                        longDistanceFrequency: "Rarely",
+                                        prioritise: "Design that stands out",
+                                        drivingDay: "City commutes and short trips",
+                                        features: ["High-end audio system", "Exciting colourways", "High-end on-board tech"],
+                                        towingWeight: 500,
+                                        chargingAccess: "At home",
+                                        isElectric: true,
+                                        description: "Fun, electric hatchback with bold design."
+                                    },
+                                    // R4 e-Tech Electric
+                                    {
+                                        name: "R4 e-Tech Electric",
+                                        capacity: "2-4",
+                                        vibe: ["Small-mid, compact, fun", "Small, nimble, practical"],
+                                        longDistanceFrequency: "Rarely",
+                                        prioritise: "Design that stands out",
+                                        drivingDay: "City commutes and short trips",
+                                        features: ["High-end audio system", "Bike rack"],
+                                        towingWeight: 750,
+                                        chargingAccess: "At work",
+                                        isElectric: true,
+                                        description: "Rugged electric crossover."
+                                    },
+                                    // Captur
+                                    {
+                                        name: "Captur",
+                                        capacity: "2-4",
+                                        vibe: ["Mid-sized, SUV-style, sleek"],
+                                        longDistanceFrequency: "Daily",
+                                        prioritise: "The essentials, done right",
+                                        drivingDay: "Always on-the-go with kids",
+                                        features: ["None of the above"],
+                                        towingWeight: 1200,
+                                        chargingAccess: "Not currently, but I could install at home",
+                                        isElectric: true, // NOTE: Changed from false in original data
+                                        description: "Small SUV, versatile and connected (Hybrid/Petrol)."
+                                    },
+                                    // Symbioz
+                                    {
+                                        name: "Symbioz",
+                                        capacity: "2-4",
+                                        vibe: ["Mid-sized, SUV-style, sleek"],
+                                        longDistanceFrequency: "Daily",
+                                        prioritise: "Features and modern tech",
+                                        drivingDay: "Light driving here and there", // NOTE: Changed from "High mileage motorway driving"
+                                        features: ["Panoramic sunroof", "High-end audio system", "High-end on-board tech"],
+                                        towingWeight: 1000,
+                                        chargingAccess: "At home",
+                                        isElectric: true, // NOTE: Changed from false in original data
+                                        description: "Mid-sized family SUV (Hybrid/Petrol)."
+                                    },
+                                    // Megane
+                                    {
+                                        name: "Megane",
+                                        capacity: "2-4",
+                                        vibe: ["Mid-sized, compact, fun"],
+                                        longDistanceFrequency: "Rarely", // NOTE: Changed from "Weekly"
+                                        prioritise: "Comfort and space", // NOTE: Changed from "Design that stands out"
+                                        drivingDay: "Light driving here and there", // NOTE: Changed from "High mileage motorway driving"
+                                        features: ["High-end audio system", "Bike rack", "Sporty add-ons"],
+                                        towingWeight: 750,
+                                        chargingAccess: "At home",
+                                        isElectric: true,
+                                        description: "Sporty electric hatchback."
+                                    },
+                                    // Scenic
+                                    {
+                                        name: "Scenic",
+                                        capacity: "5",
+                                        vibe: ["Spacious, family-friendly"], // NOTE: Vibe simplified
+                                        longDistanceFrequency: "Daily",
+                                        prioritise: "Features and modern tech", // NOTE: Changed from "Comfort and space"
+                                        drivingDay: "High mileage motorway driving",
+                                        features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"],
+                                        towingWeight: 1500,
+                                        chargingAccess: "At home",
+                                        isElectric: true,
+                                        description: "Large, electric family SUV."
+                                    },
+                                    // Rafale
+                                    {
+                                        name: "Rafale",
+                                        capacity: "5",
+                                        vibe: ["Spacious, family-friendly"],
+                                        longDistanceFrequency: "Daily",
+                                        prioritise: "Features and modern tech", // NOTE: Changed from "Design that stands out"
+                                        drivingDay: "High mileage motorway driving",
+                                        features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Sporty add-ons"],
+                                        towingWeight: 1500,
+                                        chargingAccess: "At work",
+                                        isElectric: true, // NOTE: Changed from false in original data
+                                        description: "Coupe SUV with focus on design (Hybrid/Petrol)."
+                                    },
+                                    // Austral
+                                    {
+                                        name: "Austral",
+                                        capacity: "5",
+                                        vibe: ["Spacious, family-friendly"],
+                                        longDistanceFrequency: "Daily",
+                                        prioritise: "Comfort and space",
+                                        drivingDay: "High mileage motorway driving",
+                                        features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Equipment customisation"],
+                                        towingWeight: 1500,
+                                        chargingAccess: "Not currently, but I could install at home",
+                                        isElectric: true, // NOTE: Changed from false in original data
+                                        description: "Premium SUV with hybrid technology."
+                                    },
+                                    // Twingo
+                                    {
+                                        name: "Twingo",
+                                        capacity: "1-2",
+                                        vibe: ["Small, nimble, practical"],
+                                        longDistanceFrequency: "Rarely",
+                                        prioritise: "Design that stands out",
+                                        drivingDay: "City commutes and short trips",
+                                        features: ["Exciting colourways", "High-end audio system"], // NOTE: Added "High-end audio system"
+                                        towingWeight: 0,
+                                        chargingAccess: "At home",
+                                        isElectric: true,
+                                        description: "Electric city car."
+                                    }
+                                ];
 
         // --- 2. EVENT LISTENERS ---
 

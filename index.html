@@ -130,23 +130,47 @@
                     
                     <!-- Q6: High-end features (Weighted 2x per match) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">6. What high-end features, if any, do you look for? (2x Weight per Match. Note: Towing is a filter)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">6. What high-end features, if any, do you look for? (2x Weight per Match)</label>
                         <div class="space-y-2 mt-2">
                             <label class="flex items-center">
                                 <input type="checkbox" name="features" value="Panoramic sunroof" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
                                 <span class="ml-3 text-sm text-gray-600">Panoramic sunroof</span>
                             </label>
                             <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Accessibility features" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Accessibility features</span>
+                            </label>
+                            <label class="flex items-center">
                                 <input type="checkbox" name="features" value="High-end audio system" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
                                 <span class="ml-3 text-sm text-gray-600">High-end audio system</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="High-end on-board tech" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">High-end on-board tech</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Equipment customisation" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Equipment customisation</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="checkbox" name="features" value="Exciting colourways" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
                                 <span class="ml-3 text-sm text-gray-600">Exciting colourways</span>
                             </label>
                             <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Bike rack" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Bike rack</span>
+                            </label>
+                            <label class="flex items-center">
                                 <input type="checkbox" name="features" value="Capable of towing above 700 KGs" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
                                 <span class="ml-3 text-sm text-gray-600">Capable of towing above 700 KGs (Filter)</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="Sporty add-ons" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Sporty add-ons</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="features" value="None of the above" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">None of the above</span>
                             </label>
                         </div>
                     </div>
@@ -182,38 +206,78 @@
         // --- 1. CAR MODEL DATA ---
         const CAR_MODELS = [
             // Clio
-            { name: "Clio", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Weekly", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways"], towingWeight: 900, chargingAccess: "No", isElectric: false, description: "Compact and efficient city car (Petrol/Hybrid)." },
+            { name: "Clio", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Weekly", prioritise: "The essentials, done right", drivingDay: "Always on-the-go with kids", features: ["Exciting colourways", "High-end on-board tech"], towingWeight: 900, chargingAccess: "No", isElectric: false, description: "Compact and efficient city car (Petrol/Hybrid)." },
             // R5 e-Tech Electric
-            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways"], towingWeight: 500, chargingAccess: "At home", isElectric: true, description: "Fun, electric hatchback with bold design." },
+            { name: "R5 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Exciting colourways", "High-end on-board tech"], towingWeight: 500, chargingAccess: "At home", isElectric: true, description: "Fun, electric hatchback with bold design." },
             // R4 e-Tech Electric
-            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system"], towingWeight: 750, chargingAccess: "At work", isElectric: true, description: "Rugged electric crossover." },
+            { name: "R4 e-Tech Electric", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["High-end audio system", "Bike rack"], towingWeight: 750, chargingAccess: "At work", isElectric: true, description: "Rugged electric crossover." },
             // Captur
-            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "Always on-the-go with kids", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
+            { name: "Captur", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek", "Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "Always on-the-go with kids", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"], towingWeight: 1200, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Small SUV, versatile and connected (Hybrid/Petrol)." },
             // Symbioz
-            { name: "Symbioz", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system"], towingWeight: 1000, chargingAccess: "At home", isElectric: false, description: "Mid-sized family SUV (Hybrid/Petrol)." },
+            { name: "Symbioz", capacity: "2-4", vibe: ["Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Features and modern tech", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "High-end on-board tech"], towingWeight: 1000, chargingAccess: "At home", isElectric: false, description: "Mid-sized family SUV (Hybrid/Petrol)." },
             // Megane
-            { name: "Megane", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Weekly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack"], towingWeight: 750, chargingAccess: "At home", isElectric: true, description: "Sporty electric hatchback." },
+            { name: "Megane", capacity: "2-4", vibe: ["Mid-sized, compact, fun"], longDistanceFrequency: "Weekly", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["High-end audio system", "Bike rack", "Sporty add-ons"], towingWeight: 750, chargingAccess: "At home", isElectric: true, description: "Sporty electric hatchback." },
             // Scenic
-            { name: "Scenic", capacity: "5", vibe: ["Spacious, family-friendly", "Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At home", isElectric: true, description: "Large, electric family SUV." },
+            { name: "Scenic", capacity: "5", vibe: ["Spacious, family-friendly", "Mid-sized, SUV-style, sleek"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"], towingWeight: 1500, chargingAccess: "At home", isElectric: true, description: "Large, electric family SUV." },
             // Rafale
-            { name: "Rafale", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "At work", isElectric: false, description: "Coupe SUV with focus on design (Hybrid/Petrol)." },
+            { name: "Rafale", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Design that stands out", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Sporty add-ons"], towingWeight: 1500, chargingAccess: "At work", isElectric: false, description: "Coupe SUV with focus on design (Hybrid/Petrol)." },
             // Austral
-            { name: "Austral", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs"], towingWeight: 1500, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Premium SUV with hybrid technology." },
+            { name: "Austral", capacity: "5", vibe: ["Spacious, family-friendly"], longDistanceFrequency: "Daily", prioritise: "Comfort and space", drivingDay: "High mileage motorway driving", features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Equipment customisation"], towingWeight: 1500, chargingAccess: "Not currently, but I could install at home", isElectric: false, description: "Premium SUV with hybrid technology." },
             // Twingo
-            { name: "Twingo", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: [], towingWeight: 0, chargingAccess: "At home", isElectric: true, description: "Electric city car." }
+            { name: "Twingo", capacity: "1-2", vibe: ["Small, nimble, practical"], longDistanceFrequency: "Rarely", prioritise: "Design that stands out", drivingDay: "City commutes and short trips", features: ["Exciting colourways"], towingWeight: 0, chargingAccess: "At home", isElectric: true, description: "Electric city car." }
         ];
 
-        // --- 2. DYNAMIC MAPPING DATA (Removed as Q2 is no longer dynamic) ---
-        
-        // --- 3. DYNAMIC UI LOGIC (Removed as Q2 is no longer dynamic) ---
+        // --- 2. EVENT LISTENERS ---
 
-        function updateVibeOptions() {
-            // Function no longer needed, retained as a placeholder function name to avoid console errors 
-            // if the onchange event is still mistakenly referenced.
-        }
+        // Event listener for the form submission
+        document.getElementById('car-quiz-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            
+            // Collect user input from the form
+            const userInput = {
+                people: form.elements.people.value,
+                vibe: Array.from(form.elements.vibe)
+                        .filter(checkbox => checkbox.checked)
+                        .map(checkbox => checkbox.value),
+                longDistanceFrequency: form.elements.longDistanceFrequency.value,
+                prioritise: form.elements.prioritise.value,
+                drivingDay: form.elements.drivingDay.value,
+                features: Array.from(form.elements.features)
+                            .filter(checkbox => checkbox.checked)
+                            .map(checkbox => checkbox.value),
+                chargingAccess: form.elements.chargingAccess.value
+            };
 
+            const results = calculateScore(userInput);
+            renderResults(results);
+        });
 
-        // --- 4. SCORING LOGIC ---
+        // Event listener for the "None of the above" checkbox
+        const featuresCheckboxes = document.querySelectorAll('input[name="features"]');
+        const noneOfTheAboveCheckbox = document.querySelector('input[name="features"][value="None of the above"]');
+
+        featuresCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.value === 'None of the above' && checkbox.checked) {
+                    featuresCheckboxes.forEach(cb => {
+                        if (cb.value !== 'None of the above') {
+                            cb.checked = false;
+                            cb.disabled = true;
+                        }
+                    });
+                } else if (checkbox.value !== 'None of the above' && checkbox.checked) {
+                    noneOfTheAboveCheckbox.checked = false;
+                } else if (!noneOfTheAboveCheckbox.checked) {
+                    featuresCheckboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                }
+            });
+        });
+
+        // --- 3. SCORING LOGIC ---
 
         function calculateScore(userInput) {
             let rankedModels = [];
@@ -265,7 +329,7 @@
                 
                 // --- B. WEIGHTED SCORING ---
                 
-                // W1: Vibe Score (1x Weight per match, Max 2 points)
+                // W1: Vibe Score (1x Weight per match)
                 let vibeMatches = 0;
                 userInput.vibe.forEach(userVibe => {
                     if (model.vibe.includes(userVibe)) {
@@ -301,16 +365,18 @@
 
                 // W5: High-end Features (2x Weight per match)
                 let featureMatches = 0;
-                // Filter out the 'towing' feature from the user input since it was handled as a filter
-                const userFeatures = userInput.features.filter(f => f !== "Capable of towing above 700 KGs");
+                // Filter out the 'towing' and 'None' feature from the user input since it was handled as a filter or special case
+                const userFeatures = userInput.features.filter(f => f !== "Capable of towing above 700 KGs" && f !== "None of the above");
                 
-                userFeatures.forEach(userFeature => {
-                    if (model.features.includes(userFeature)) {
-                        score += 2;
-                        featureMatches++;
-                        matchDetails.push({ key: `Feature: ${userFeature} (2x)`, isMatch: true, reason: `Feature included (+2 pts)` });
-                    }
-                });
+                if (userFeatures.length > 0) {
+                    userFeatures.forEach(userFeature => {
+                        if (model.features.includes(userFeature)) {
+                            score += 2;
+                            featureMatches++;
+                            matchDetails.push({ key: `Feature: ${userFeature} (2x)`, isMatch: true, reason: `Feature included (+2 pts)` });
+                        }
+                    });
+                }
                 
                 matchDetails.push({ 
                     key: "Feature Score", 
@@ -335,7 +401,7 @@
             return rankedModels;
         }
 
-        // --- 5. UI RENDERING ---
+        // --- 4. UI RENDERING ---
 
         function renderResults(results) {
             const container = document.getElementById('results-container');
@@ -371,7 +437,7 @@
         }
 
         function createModelCard(result, rank) {
-            const totalScore = 12; // Max theoretical score is now 12
+            const totalScore = 20; 
             const percentage = ((result.score / totalScore) * 100).toFixed(0);
 
             let detailsHtml = result.matchDetails.map(detail => `
@@ -423,38 +489,12 @@
             `;
         }
 
-        // --- 6. EVENT HANDLER & INITIALIZATION ---
+        // --- 5. INITIALIZATION ---
 
-        document.getElementById('car-quiz-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const form = e.target;
-            
-            // Collect user input from the form
-            const userInput = {
-                people: form.elements.people.value,
-                vibe: Array.from(form.elements.vibe) // Q2 is now array of checked values
-                        .filter(checkbox => checkbox.checked)
-                        .map(checkbox => checkbox.value),
-                longDistanceFrequency: form.elements.longDistanceFrequency.value, // Q3
-                prioritise: form.elements.prioritise.value, // Q4
-                drivingDay: form.elements.drivingDay.value, // Q5
-                features: Array.from(form.elements.features) // Q6
-                            .filter(checkbox => checkbox.checked)
-                            .map(checkbox => checkbox.value),
-                chargingAccess: form.elements.chargingAccess.value // Q7
-            };
-
-            const results = calculateScore(userInput);
-            renderResults(results);
-        });
-
-        // Initialization now only sets the placeholder text, as Q2 is no longer dynamic
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('results-container').innerHTML = `
                 <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
                     <p class="font-semibold text-gray-600">Input your preferences on the left to start the scoring validation.</p>
-                    <p class="text-sm text-gray-500 mt-1">Total score is now based on a maximum of 12 points.</p>
                 </div>
             `;
         });

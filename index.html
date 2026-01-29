@@ -145,7 +145,7 @@
                 chargingAccess: Array.from(form.elements.chargingAccess).filter(cb => cb.checked).map(cb => cb.value)
             };
             const results = calculateScore(userInput);
-            renderResults(results);
+            renderResults(results, userInput);
         });
 
         const chargingAccessCheckboxes = document.querySelectorAll('input[name="chargingAccess"]');
@@ -171,10 +171,14 @@
         function calculateScore(userInput) {
             return CAR_MODELS.map(model => {
                 let isFiltered = false;
+                let breakdown = {};
 
                 // Vibe Filter
                 if (userInput.vibe && model.vibe !== userInput.vibe) {
                     isFiltered = true;
+                    breakdown.vibe = { matched: false, text: `Mismatched size: User wants ${userInput.vibe}` };
+                } else {
+                    breakdown.vibe = { matched: true, text: `Matched size` };
                 }
                 
                 // Charging Access Filter
@@ -183,25 +187,51 @@
 
                 if (userWantsNoCharging && model.isElectric) {
                     isFiltered = true;
+                    breakdown.charging = { matched: false, text: `Charging: EV not suitable as user has no charging access` };
                 } else if (userWantsCharging && model.isElectric) {
                     const hasChargingMatch = userInput.chargingAccess.some(opt => model.chargingAccess.includes(opt));
-                    if (!hasChargingMatch) isFiltered = true;
+                    if (!hasChargingMatch) {
+                        isFiltered = true;
+                        breakdown.charging = { matched: false, text: `Charging: User charging options do not match model's requirements` };
+                    } else {
+                        breakdown.charging = { matched: true, text: `Charging: Charging access compatible` };
+                    }
+                } else {
+                    breakdown.charging = { matched: true, text: `Charging: Compatible` };
                 }
 
+
                 if (isFiltered) {
-                    return { model: model.name, score: -1, isFiltered: true, description: model.description };
+                    return { model: model.name, score: -1, isFiltered: true, description: model.description, breakdown };
                 }
                 
                 let score = 0;
-                if (model.longDistanceFrequency === userInput.longDistanceFrequency) score += 2;
-                if (model.prioritise === userInput.prioritise) score += 3;
-                if (model.drivingDay === userInput.drivingDay) score += 1;
+                if (model.longDistanceFrequency === userInput.longDistanceFrequency) {
+                    score += 2;
+                    breakdown.distance = { matched: true, text: `Distance Freq. (2x): Matched frequency: "${userInput.longDistanceFrequency}" (+2 pts)` };
+                } else {
+                    breakdown.distance = { matched: false, text: `Distance Freq. (2x): Mismatched frequency: User wants "${userInput.longDistanceFrequency}" (+0 pts)` };
+                }
+
+                if (model.prioritise === userInput.prioritise) {
+                    score += 3;
+                    breakdown.prioritise = { matched: true, text: `Prioritise (3x): Matched priority: "${userInput.prioritise}" (+3 pts)` };
+                } else {
+                    breakdown.prioritise = { matched: false, text: `Prioritise (3x): Mismatched priority: User wants "${userInput.prioritise}" (+0 pts)` };
+                }
+
+                if (model.drivingDay === userInput.drivingDay) {
+                    score += 1;
+                    breakdown.drivingDay = { matched: true, text: `Driving Day (1x): Matched driving day: "${userInput.drivingDay}" (+1 pt)` };
+                } else {
+                    breakdown.drivingDay = { matched: false, text: `Driving Day (1x): Mismatched driving day: User wants "${userInput.drivingDay}" (+0 pts)` };
+                }
                 
-                return { model: model.name, score, isFiltered: false, description: model.description };
+                return { model: model.name, score, isFiltered: false, description: model.description, breakdown };
             }).sort((a, b) => b.score - a.score);
         }
 
-        function renderResults(results) {
+        function renderResults(results, userInput) {
             const container = document.getElementById('results-container');
             container.innerHTML = '';
             const passedModels = results.filter(r => !r.isFiltered);
@@ -213,9 +243,9 @@
                         <p class="text-sm text-red-600 mt-1">Please adjust your filter options.</p>
                     </div>`;
             } else {
-                container.innerHTML += '<h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">Recommended Models</h3>';
+                container.innerHTML += '<h2 class="text-2xl font-bold mb-6 text-gray-700">Recommended & Scored Models</h2>';
                 passedModels.forEach((result, index) => {
-                    container.innerHTML += createModelCard(result, index + 1);
+                    container.innerHTML += createModelCard(result, index + 1, userInput);
                 });
             }
 
@@ -227,9 +257,25 @@
             }
         }
 
-        function createModelCard(result, rank) {
+        function createModelCard(result, rank, userInput) {
             const totalScore = 6;
             const percentage = result.score > 0 ? ((result.score / totalScore) * 100).toFixed(0) : 0;
+            const breakdownHTML = `
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <p class="flex items-center text-sm font-semibold text-gray-600 cursor-pointer" onclick="toggleBreakdown(this)">
+                        <svg class="w-4 h-4 mr-2 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        View Detailed Scoring Breakdown
+                    </p>
+                    <div class="hidden mt-3 pl-6 space-y-2 text-xs">
+                        ${result.breakdown.vibe ? `<p class="${result.breakdown.vibe.matched ? 'text-green-600' : 'text-red-600'}">${result.breakdown.vibe.matched ? '✓' : '✗'} Vibe: ${result.breakdown.vibe.text}</p>` : ''}
+                        ${result.breakdown.charging ? `<p class="${result.breakdown.charging.matched ? 'text-green-600' : 'text-red-600'}">${result.breakdown.charging.matched ? '✓' : '✗'} ${result.breakdown.charging.text}</p>` : ''}
+                        ${result.breakdown.distance ? `<p class="${result.breakdown.distance.matched ? 'text-green-600' : 'text-red-600'}">${result.breakdown.distance.matched ? '✓' : '✗'} ${result.breakdown.distance.text}</p>` : ''}
+                        ${result.breakdown.prioritise ? `<p class="${result.breakdown.prioritise.matched ? 'text-green-600' : 'text-red-600'}">${result.breakdown.prioritise.matched ? '✓' : '✗'} ${result.breakdown.prioritise.text}</p>` : ''}
+                        ${result.breakdown.drivingDay ? `<p class="${result.breakdown.drivingDay.matched ? 'text-green-600' : 'text-red-600'}">${result.breakdown.drivingDay.matched ? '✓' : '✗'} ${result.breakdown.drivingDay.text}</p>` : ''}
+                    </div>
+                </div>
+            `;
+
             return `<div class="p-4 border border-gray-200 rounded-lg bg-white">
                     <div class="flex items-start">
                         <span class="text-lg font-bold w-6 h-6 flex items-center justify-center rounded-full ${rank === 1 ? 'bg-yellow-400 text-gray-800' : 'bg-gray-100 text-gray-600'}">${rank}</span>
@@ -242,6 +288,7 @@
                             <p class="text-sm text-gray-500 mt-2">${result.description}</p>
                         </div>
                     </div>
+                    ${breakdownHTML}
                 </div>`;
         }
 
@@ -254,6 +301,14 @@
                     <span class="text-sm font-medium text-red-500">Excluded</span>
                 </div>`;
         }
+
+        function toggleBreakdown(element) {
+            const breakdown = element.nextElementSibling;
+            const icon = element.firstElementChild;
+            breakdown.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
     </script>
 </body>
 </html>

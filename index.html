@@ -40,26 +40,18 @@
 
                     <!-- Q1: Vibe Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">1. What size car feels right for your needs? (Filter)</label>
-                        <div class="space-y-2 mt-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Small (ideal for 1-2, big enough for 4)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Small (ideal for 1-2, big enough for 4)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Mid-sized (ideal for 1-4, big enough for 5)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Mid-sized (ideal for 1-4, big enough for 5)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Large (comfortably seats 5)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Large (comfortably seats 5)</span>
-                            </label>
-                        </div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">1. What size car feels right for your needs?</label>
+                        <select name="vibe" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
+                            <option value="">-- Select a size --</option>
+                            <option value="Small (ideal for 1-2, big enough for 4)">Small (ideal for 1-2, big enough for 4)</option>
+                            <option value="Mid-sized (ideal for 1-4, big enough for 5)">Mid-sized (ideal for 1-4, big enough for 5)</option>
+                            <option value="Large (comfortably seats 5)">Large (comfortably seats 5)</option>
+                        </select>
                     </div>
 
                     <!-- Q2: Driving Distance Frequency (Weighted 2x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">2. How often do you drive long distances? (2x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">2. How often do you drive long distances?</label>
                         <select name="longDistanceFrequency" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Daily">Daily</option>
                             <option value="Weekly">Weekly</option>
@@ -70,7 +62,7 @@
 
                     <!-- Q3: Prioritise (Weighted 3x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">3. Above all else, you prioritise... (3x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">3. Above all else, you prioritise...</label>
                         <select name="prioritise" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Design that stands out">Design that stands out</option>
                             <option value="Features and modern tech">Features and modern tech</option>
@@ -81,7 +73,7 @@
 
                     <!-- Q4: Typical Driving Day (Weighted 1x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">4. What's your typical driving day? (1x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">4. What's your typical driving day?</label>
                         <select name="drivingDay" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="City commutes and short trips">City commutes and short trips</option>
                             <option value="Always on-the-go with kids">Always on-the-go with kids</option>
@@ -92,7 +84,7 @@
                     
                     <!-- Q5: Charging Point Access (Filter) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">5. Do you have access to a charging point? (Filter)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">5. Do you have access to a charging point?</label>
                         <div class="space-y-2 mt-2">
                             <label class="flex items-center">
                                 <input type="checkbox" name="chargingAccess" value="At home" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
@@ -146,7 +138,7 @@
             e.preventDefault();
             const form = e.target;
             const userInput = {
-                vibe: Array.from(form.elements.vibe).filter(cb => cb.checked).map(cb => cb.value),
+                vibe: form.elements.vibe.value,
                 longDistanceFrequency: form.elements.longDistanceFrequency.value,
                 prioritise: form.elements.prioritise.value,
                 drivingDay: form.elements.drivingDay.value,
@@ -181,7 +173,7 @@
                 let isFiltered = false;
 
                 // Vibe Filter
-                if (userInput.vibe.length > 0 && !userInput.vibe.includes(model.vibe)) {
+                if (userInput.vibe && model.vibe !== userInput.vibe) {
                     isFiltered = true;
                 }
                 

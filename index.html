@@ -4,47 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Suitability Scorer</title>
-    <!-- 
-        *** FIX: Using a local path instead of CDN to avoid CSP blocking. ***
-        You must download the content of https://cdn.tailwindcss.com/3.4.17
-        and save it as 'tailwind.min.js' in the same directory as this file. 
-    -->
-    <script src="./tailwind.min.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.1"></script>
     <style>
-        /* Custom styles for aesthetic enhancements */
         :root {
-            --primary-color: #e51937; /* A deep red, similar to a car badge */
+            --primary-color: #e51937;
             --bg-color: #f7f9fb;
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
         }
-
         .card {
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             border-radius: 1rem;
             background-color: white;
         }
-
-        .result-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
         .primary-btn {
             background-color: var(--primary-color);
-            transition: background-color 0.2s;
-        }
-
-        .primary-btn:hover {
-            background-color: #c91530;
-        }
-
-        .match-badge {
-            background-color: #ecfdf5; /* Light green */
-            color: #059669; /* Dark green */
         }
     </style>
 </head>
@@ -53,7 +29,7 @@
     <div class="max-w-4xl mx-auto">
         <header class="text-center mb-10">
             <h1 class="text-4xl font-extrabold text-gray-800">Vehicle Suitability Scorer</h1>
-            <p class="mt-2 text-xl text-gray-500">Test your model scoring logic with a simple, interactive questionnaire.</p>
+            <p class="mt-2 text-xl text-gray-500">Find your perfect car with this interactive questionnaire.</p>
         </header>
 
         <main class="grid lg:grid-cols-2 gap-8">
@@ -62,42 +38,28 @@
                 <h2 class="text-2xl font-bold mb-6 text-gray-700">User Profile</h2>
                 <form id="car-quiz-form" class="space-y-6">
 
-                    <!-- Q1: How many people (FILTER) -->
+                    <!-- Q1: Vibe Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">1. How many people (and/or dogs!) are typically in your car? (Filter)</label>
-                        <select name="people" id="people-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                            <option value="1-2">1-2</option>
-                            <option value="2-4">2-4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-
-                    <!-- Q2: Perfect Car Vibe (MULTIPLE CHOICE - Score 1x per match, Max 2 pts) -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">2. What car feels right to you? (Score 1x per match)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">1. What size car feels right for your needs? (Filter)</label>
                         <div class="space-y-2 mt-2">
                             <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Small, nimble, practical" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Small, nimble, practical (City cars)</span>
+                                <input type="checkbox" name="vibe" value="Small (ideal for 1-2, big enough for 4)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Small (ideal for 1-2, big enough for 4)</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Mid-sized, compact, fun" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Mid-sized, compact, fun (Hatchbacks)</span>
+                                <input type="checkbox" name="vibe" value="Mid-sized (ideal for 1-4, big enough for 5)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Mid-sized (ideal for 1-4, big enough for 5)</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Mid-sized, SUV-style, sleek" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Mid-sized, SUV-style, sleek (Compact SUVs)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="vibe" value="Spacious, family-friendly" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Spacious, family-friendly (Large SUVs/Crossovers)</span>
+                                <input type="checkbox" name="vibe" value="Large (comfortably seats 5)" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Large (comfortably seats 5)</span>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Q3: Driving Distance Frequency (Weighted 2x) -->
+                    <!-- Q2: Driving Distance Frequency (Weighted 2x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">3. How often do you drive +X miles? (2x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">2. How often do you drive long distances? (2x Weight)</label>
                         <select name="longDistanceFrequency" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Daily">Daily</option>
                             <option value="Weekly">Weekly</option>
@@ -106,9 +68,9 @@
                         </select>
                     </div>
 
-                    <!-- Q4: Prioritise (Weighted 1x) -->
+                    <!-- Q3: Prioritise (Weighted 3x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">4. Above all else, you prioritise... (1x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">3. Above all else, you prioritise... (3x Weight)</label>
                         <select name="prioritise" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="Design that stands out">Design that stands out</option>
                             <option value="Features and modern tech">Features and modern tech</option>
@@ -117,9 +79,9 @@
                         </select>
                     </div>
 
-                    <!-- Q5: Typical Driving Day (Weighted 1x) -->
+                    <!-- Q4: Typical Driving Day (Weighted 1x) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">5. What's your typical driving day? (1x Weight)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">4. What's your typical driving day? (1x Weight)</label>
                         <select name="drivingDay" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
                             <option value="City commutes and short trips">City commutes and short trips</option>
                             <option value="Always on-the-go with kids">Always on-the-go with kids</option>
@@ -128,62 +90,27 @@
                         </select>
                     </div>
                     
-                    <!-- Q6: High-end features (Weighted 2x per match) -->
+                    <!-- Q5: Charging Point Access (Filter) -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">6. What high-end features, if any, do you look for? (2x Weight per Match)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">5. Do you have access to a charging point? (Filter)</label>
                         <div class="space-y-2 mt-2">
                             <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Panoramic sunroof" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Panoramic sunroof</span>
+                                <input type="checkbox" name="chargingAccess" value="At home" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">At home</span>
                             </label>
                             <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Accessibility features" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Accessibility features</span>
+                                <input type="checkbox" name="chargingAccess" value="At work" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">At work</span>
                             </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="High-end audio system" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">High-end audio system</span>
+                             <label class="flex items-center">
+                                <input type="checkbox" name="chargingAccess" value="Not currently but I could install at home" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">Not currently, but I could install at home</span>
                             </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="High-end on-board tech" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">High-end on-board tech</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Equipment customisation" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Equipment customisation</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Exciting colourways" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Exciting colourways</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Bike rack" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Bike rack</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Capable of towing above 700 KGs" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Capable of towing above 700 KGs (Filter)</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="Sporty add-ons" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">Sporty add-ons</span>
-                            </label>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="features" value="None of the above" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
-                                <span class="ml-3 text-sm text-gray-600">None of the above</span>
+                             <label class="flex items-center">
+                                <input type="checkbox" name="chargingAccess" value="No" class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500">
+                                <span class="ml-3 text-sm text-gray-600">No</span>
                             </label>
                         </div>
-                    </div>
-
-                    <!-- Q7: Charging Point Access (Filter) -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">7. Do you have access to a charging point? (Filter)</label>
-                        <select name="chargingAccess" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500">
-                            <option value="At home">At home</option>
-                            <option value="At work">At work</option>
-                            <option value="Not currently, but I could install at home">Not currently, but I could install at home</option>
-                            <option value="No">No</option>
-                        </select>
                     </div>
 
                     <button type="submit" class="w-full primary-btn text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:shadow-lg mt-4">
@@ -196,428 +123,143 @@
             <div id="results" class="card p-6 md:p-8">
                 <h2 class="text-2xl font-bold mb-6 text-gray-700">Recommended Models</h2>
                 <div id="results-container" class="space-y-4">
-                    <p class="text-gray-500 text-center py-4">Select your answers and click "Find My Perfect Match" to see the ranked recommendations.</p>
+                    <p class="text-gray-500 text-center py-4">Complete the questionnaire to see your recommendations.</p>
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // --- 1. CAR MODEL DATA ---
         const CAR_MODELS = [
-                // Clio
-                {
-                    name: "Clio",
-                    capacity: "1-2",
-                    vibe: ["Small, nimble, practical"],
-                    longDistanceFrequency: "Weekly",
-                    prioritise: "The essentials, done right",
-                    drivingDay: "Always on-the-go with kids",
-                    features: ["Exciting colourways"],
-                    towingWeight: 900,
-                    chargingAccess: "No",
-                    isElectric: false,
-                    description: "Compact and efficient city car (Petrol/Hybrid)."
-                },
-                // R5 e-Tech Electric
-                {
-                    name: "R5 e-Tech Electric",
-                    capacity: "2-4",
-                    vibe: ["Small-mid, compact, fun", "Small, nimble, practical"],
-                    longDistanceFrequency: "Rarely",
-                    prioritise: "Design that stands out",
-                    drivingDay: "City commutes and short trips",
-                    features: ["High-end audio system", "Exciting colourways", "High-end on-board tech"],
-                    towingWeight: 500,
-                    chargingAccess: "At home",
-                    isElectric: true,
-                    description: "Fun, electric hatchback with bold design."
-                },
-                // R4 e-Tech Electric
-                {
-                    name: "R4 e-Tech Electric",
-                    capacity: "2-4",
-                    vibe: ["Small-mid, compact, fun", "Small, nimble, practical"],
-                    longDistanceFrequency: "Rarely",
-                    prioritise: "Design that stands out",
-                    drivingDay: "City commutes and short trips",
-                    features: ["High-end audio system", "Bike rack"],
-                    towingWeight: 750,
-                    chargingAccess: "At work",
-                    isElectric: true,
-                    description: "Rugged electric crossover."
-                },
-                // Captur
-                {
-                    name: "Captur",
-                    capacity: "2-4",
-                    vibe: ["Mid-sized, SUV-style, sleek"],
-                    longDistanceFrequency: "Daily",
-                    prioritise: "The essentials, done right",
-                    drivingDay: "Always on-the-go with kids",
-                    features: ["None of the above"],
-                    towingWeight: 1200,
-                    chargingAccess: "Not currently, but I could install at home",
-                    isElectric: true, // NOTE: Changed from false in original data
-                    description: "Small SUV, versatile and connected (Hybrid/Petrol)."
-                },
-                // Symbioz
-                {
-                    name: "Symbioz",
-                    capacity: "2-4",
-                    vibe: ["Mid-sized, SUV-style, sleek"],
-                    longDistanceFrequency: "Daily",
-                    prioritise: "Features and modern tech",
-                    drivingDay: "Light driving here and there", // NOTE: Changed from "High mileage motorway driving"
-                    features: ["Panoramic sunroof", "High-end audio system", "High-end on-board tech"],
-                    towingWeight: 1000,
-                    chargingAccess: "At home",
-                    isElectric: true, // NOTE: Changed from false in original data
-                    description: "Mid-sized family SUV (Hybrid/Petrol)."
-                },
-                // Megane
-                {
-                    name: "Megane",
-                    capacity: "2-4",
-                    vibe: ["Mid-sized, compact, fun"],
-                    longDistanceFrequency: "Rarely", // NOTE: Changed from "Weekly"
-                    prioritise: "Comfort and space", // NOTE: Changed from "Design that stands out"
-                    drivingDay: "Light driving here and there", // NOTE: Changed from "High mileage motorway driving"
-                    features: ["High-end audio system", "Bike rack", "Sporty add-ons"],
-                    towingWeight: 750,
-                    chargingAccess: "At home",
-                    isElectric: true,
-                    description: "Sporty electric hatchback."
-                },
-                // Scenic
-                {
-                    name: "Scenic",
-                    capacity: "5",
-                    vibe: ["Spacious, family-friendly"], // NOTE: Vibe simplified
-                    longDistanceFrequency: "Daily",
-                    prioritise: "Features and modern tech", // NOTE: Changed from "Comfort and space"
-                    drivingDay: "High mileage motorway driving",
-                    features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Accessibility features"],
-                    towingWeight: 1500,
-                    chargingAccess: "At home",
-                    isElectric: true,
-                    description: "Large, electric family SUV."
-                },
-                // Rafale
-                {
-                    name: "Rafale",
-                    capacity: "5",
-                    vibe: ["Spacious, family-friendly"],
-                    longDistanceFrequency: "Daily",
-                    prioritise: "Features and modern tech", // NOTE: Changed from "Design that stands out"
-                    drivingDay: "High mileage motorway driving",
-                    features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Sporty add-ons"],
-                    towingWeight: 1500,
-                    chargingAccess: "At work",
-                    isElectric: true, // NOTE: Changed from false in original data
-                    description: "Coupe SUV with focus on design (Hybrid/Petrol)."
-                },
-                // Austral
-                {
-                    name: "Austral",
-                    capacity: "5",
-                    vibe: ["Spacious, family-friendly"],
-                    longDistanceFrequency: "Daily",
-                    prioritise: "Comfort and space",
-                    drivingDay: "High mileage motorway driving",
-                    features: ["Panoramic sunroof", "High-end audio system", "Capable of towing above 700 KGs", "Equipment customisation"],
-                    towingWeight: 1500,
-                    chargingAccess: "Not currently, but I could install at home",
-                    isElectric: true, // NOTE: Changed from false in original data
-                    description: "Premium SUV with hybrid technology."
-                },
-                // Twingo
-                {
-                    name: "Twingo",
-                    capacity: "1-2",
-                    vibe: ["Small, nimble, practical"],
-                    longDistanceFrequency: "Rarely",
-                    prioritise: "Design that stands out",
-                    drivingDay: "City commutes and short trips",
-                    features: ["Exciting colourways", "High-end audio system"], // NOTE: Added "High-end audio system"
-                    towingWeight: 0,
-                    chargingAccess: "At home",
-                    isElectric: true,
-                    description: "Electric city car."
-                }
-            ];
+            { "name": "Clio", "vibe": "Small (ideal for 1-2, big enough for 4)", "longDistanceFrequency": "Weekly", "prioritise": "The essentials, done right", "drivingDay": "Light driving here and there", "chargingAccess": ["No"], "isElectric": false, "description": "Compact and efficient city car (Petrol/Hybrid)." },
+            { "name": "R5 e-Tech Electric", "vibe": "Small (ideal for 1-2, big enough for 4)", "longDistanceFrequency": "Rarely", "prioritise": "Design that stands out", "drivingDay": "City commutes and short trips", "chargingAccess": ["At work", "Not currently but I could install at home", "At home"], "isElectric": true, "description": "Fun, electric hatchback with bold design." },
+            { "name": "R4 e-Tech Electric", "vibe": "Mid-sized (ideal for 1-4, big enough for 5)", "longDistanceFrequency": "Rarely", "prioritise": "Design that stands out", "drivingDay": "City commutes and short trips", "chargingAccess": ["At work", "Not currently but I could install at home", "At home"], "isElectric": true, "description": "Rugged electric crossover." },
+            { "name": "Captur", "vibe": "Mid-sized (ideal for 1-4, big enough for 5)", "longDistanceFrequency": "Daily", "prioritise": "The essentials, done right", "drivingDay": "Always on-the-go with kids", "chargingAccess": ["No"], "isElectric": false, "description": "Small SUV, versatile and connected (Hybrid/Petrol)." },
+            { "name": "Symbioz", "vibe": "Mid-sized (ideal for 1-4, big enough for 5)", "longDistanceFrequency": "Daily", "prioritise": "Design that stands out", "drivingDay": "Light driving here and there", "chargingAccess": ["No"], "isElectric": false, "description": "Mid-sized family SUV (Hybrid/Petrol)." },
+            { "name": "Megane", "vibe": "Mid-sized (ideal for 1-4, big enough for 5)", "longDistanceFrequency": "Rarely", "prioritise": "Comfort and space", "drivingDay": "Light driving here and there", "chargingAccess": ["At work", "Not currently but I could install at home", "At home"], "isElectric": true, "description": "Sporty electric hatchback." },
+            { "name": "Scenic", "vibe": "Large (comfortably seats 5)", "longDistanceFrequency": "Daily", "prioritise": "Features and modern tech", "drivingDay": "Always on-the-go with kids", "chargingAccess": ["At work", "Not currently but I could install at home", "At home"], "isElectric": true, "description": "Large, electric family SUV." },
+            { "name": "Rafale", "vibe": "Large (comfortably seats 5)", "longDistanceFrequency": "Daily", "prioritise": "Design that stands out", "drivingDay": "High mileage motorway driving", "chargingAccess": ["No"], "isElectric": false, "description": "Coupe SUV with focus on design (Hybrid/Petrol)." },
+            { "name": "Austral", "vibe": "Large (comfortably seats 5)", "longDistanceFrequency": "Daily", "prioritise": "Comfort and space", "drivingDay": "High mileage motorway driving", "chargingAccess": ["No"], "isElectric": false, "description": "Premium SUV with hybrid technology." }
+        ];
 
-        // --- 2. EVENT LISTENERS ---
-
-        // Event listener for the form submission
         document.getElementById('car-quiz-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const form = e.target;
-            
-            // Collect user input from the form
             const userInput = {
-                people: form.elements.people.value,
-                vibe: Array.from(form.elements.vibe)
-                        .filter(checkbox => checkbox.checked)
-                        .map(checkbox => checkbox.value),
+                vibe: Array.from(form.elements.vibe).filter(cb => cb.checked).map(cb => cb.value),
                 longDistanceFrequency: form.elements.longDistanceFrequency.value,
                 prioritise: form.elements.prioritise.value,
                 drivingDay: form.elements.drivingDay.value,
-                features: Array.from(form.elements.features)
-                            .filter(checkbox => checkbox.checked)
-                            .map(checkbox => checkbox.value),
-                chargingAccess: form.elements.chargingAccess.value
+                chargingAccess: Array.from(form.elements.chargingAccess).filter(cb => cb.checked).map(cb => cb.value)
             };
-
             const results = calculateScore(userInput);
             renderResults(results);
         });
 
-        // Event listener for the "None of the above" checkbox
-        const featuresCheckboxes = document.querySelectorAll('input[name="features"]');
-        const noneOfTheAboveCheckbox = document.querySelector('input[name="features"][value="None of the above"]');
-
-        featuresCheckboxes.forEach(checkbox => {
+        const chargingAccessCheckboxes = document.querySelectorAll('input[name="chargingAccess"]');
+        const chargingAccessNoneCheckbox = document.querySelector('input[name="chargingAccess"][value="No"]');
+        chargingAccessCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', () => {
-                if (checkbox.value === 'None of the above' && checkbox.checked) {
-                    featuresCheckboxes.forEach(cb => {
-                        if (cb.value !== 'None of the above') {
+                if (checkbox.value === 'No' && checkbox.checked) {
+                    chargingAccessCheckboxes.forEach(cb => {
+                        if (cb.value !== 'No') {
                             cb.checked = false;
                             cb.disabled = true;
                         }
                     });
-                } else if (checkbox.value !== 'None of the above' && checkbox.checked) {
-                    noneOfTheAboveCheckbox.checked = false;
-                } else if (!noneOfTheAboveCheckbox.checked) {
-                    featuresCheckboxes.forEach(cb => {
-                        cb.disabled = false;
-                    });
+                } else if (checkbox.value !== 'No' && checkbox.checked) {
+                    chargingAccessNoneCheckbox.checked = false;
+                    chargingAccessCheckboxes.forEach(cb => { cb.disabled = false; });
+                } else if (document.querySelectorAll('input[name="chargingAccess"]:checked').length === 0) {
+                    chargingAccessCheckboxes.forEach(cb => { cb.disabled = false; });
                 }
             });
         });
 
-        // --- 3. SCORING LOGIC ---
-
         function calculateScore(userInput) {
-            let rankedModels = [];
-
-            CAR_MODELS.forEach(model => {
-                let score = 0;
+            return CAR_MODELS.map(model => {
                 let isFiltered = false;
-                let matchDetails = [];
 
-                // --- A. FILTERS (Pass/Fail) ---
+                // Vibe Filter
+                if (userInput.vibe.length > 0 && !userInput.vibe.includes(model.vibe)) {
+                    isFiltered = true;
+                }
                 
-                // F1: People Capacity Filter
-                if (userInput.people === "5" && model.capacity !== "5") {
-                    isFiltered = true;
-                    matchDetails.push({ key: "People", isMatch: false, reason: `Needs 5 but model has ${model.capacity}` });
-                } else if (userInput.people === "2-4" && model.capacity === "1-2") {
-                    isFiltered = true;
-                    matchDetails.push({ key: "People", isMatch: false, reason: `Needs 2-4 or more but model has ${model.capacity}` });
-                }
-                else {
-                    matchDetails.push({ key: "People", isMatch: true, reason: `Matches capacity (${model.capacity})` });
-                }
+                // Charging Access Filter
+                const userWantsNoCharging = userInput.chargingAccess.includes("No");
+                const userWantsCharging = userInput.chargingAccess.some(opt => opt !== "No");
 
-                // F2: Towing Filter
-                const wantsTowing = userInput.features.includes("Capable of towing above 700 KGs");
-                if (wantsTowing && model.towingWeight < 700) {
+                if (userWantsNoCharging && model.isElectric) {
                     isFiltered = true;
-                    matchDetails.push({ key: "Towing", isMatch: false, reason: `Requires towing > 700kg, model has ${model.towingWeight}kg` });
-                } else if (wantsTowing && model.towingWeight >= 700) {
-                    matchDetails.push({ key: "Towing", isMatch: true, reason: `Towing match (has ${model.towingWeight}kg)` });
-                } else if (!wantsTowing) {
-                    matchDetails.push({ key: "Towing", isMatch: true, reason: "Towing not required by user" });
+                } else if (userWantsCharging && model.isElectric) {
+                    const hasChargingMatch = userInput.chargingAccess.some(opt => model.chargingAccess.includes(opt));
+                    if (!hasChargingMatch) isFiltered = true;
                 }
 
-                // F3: Charging Access Filter
-                if (userInput.chargingAccess === "No" && model.isElectric) {
-                    isFiltered = true;
-                    matchDetails.push({ key: "Charging", isMatch: false, reason: `User has no charging, model is electric` });
-                } else {
-                    matchDetails.push({ key: "Charging", isMatch: true, reason: `Charging access compatible` });
-                }
-
-
-                // If the model is filtered, skip scoring
                 if (isFiltered) {
-                    rankedModels.push({ model: model.name, score: -1, isFiltered: true, matchDetails, description: model.description });
-                    return;
+                    return { model: model.name, score: -1, isFiltered: true, description: model.description };
                 }
                 
-                // --- B. WEIGHTED SCORING ---
+                let score = 0;
+                if (model.longDistanceFrequency === userInput.longDistanceFrequency) score += 2;
+                if (model.prioritise === userInput.prioritise) score += 3;
+                if (model.drivingDay === userInput.drivingDay) score += 1;
                 
-                // W1: Vibe Score (1x Weight per match)
-                let vibeMatches = 0;
-                userInput.vibe.forEach(userVibe => {
-                    if (model.vibe.includes(userVibe)) {
-                        score += 1;
-                        vibeMatches++;
-                    }
-                });
-                matchDetails.push({ key: "Vibe Match (1x per)", isMatch: vibeMatches > 0, reason: `Matched ${vibeMatches} Vibe tags (+${vibeMatches} pts)` });
-
-                // W2: Distance Frequency (2x Weight)
-                if (model.longDistanceFrequency === userInput.longDistanceFrequency) {
-                    score += 2;
-                    matchDetails.push({ key: "Distance Freq. (2x)", isMatch: true, reason: `Matched frequency: "${model.longDistanceFrequency}" (+2 pts)` });
-                } else {
-                    matchDetails.push({ key: "Distance Freq. (2x)", isMatch: false, reason: `Mismatched frequency: User wants "${userInput.longDistanceFrequency}"` });
-                }
-
-                // W3: Prioritise (1x Weight)
-                if (model.prioritise === userInput.prioritise) {
-                    score += 1;
-                    matchDetails.push({ key: "Prioritise (1x)", isMatch: true, reason: `Matched priority: "${model.prioritise}" (+1 pt)` });
-                } else {
-                    matchDetails.push({ key: "Prioritise (1x)", isMatch: false, reason: `Mismatched priority: User wants "${userInput.prioritise}"` });
-                }
-
-                // W4: Driving Day (1x Weight)
-                if (model.drivingDay === userInput.drivingDay) {
-                    score += 1;
-                    matchDetails.push({ key: "Driving Day (1x)", isMatch: true, reason: `Matched driving day: "${model.drivingDay}" (+1 pt)` });
-                } else {
-                    matchDetails.push({ key: "Driving Day (1x)", isMatch: false, reason: `Mismatched driving day: User wants "${userInput.drivingDay}"` });
-                }
-
-                // W5: High-end Features (2x Weight per match)
-                let featureMatches = 0;
-                // Filter out the 'towing' and 'None' feature from the user input since it was handled as a filter or special case
-                const userFeatures = userInput.features.filter(f => f !== "Capable of towing above 700 KGs" && f !== "None of the above");
-                
-                if (userFeatures.length > 0) {
-                    userFeatures.forEach(userFeature => {
-                        if (model.features.includes(userFeature)) {
-                            score += 2;
-                            featureMatches++;
-                            matchDetails.push({ key: `Feature: ${userFeature} (2x)`, isMatch: true, reason: `Feature included (+2 pts)` });
-                        }
-                    });
-                }
-                
-                matchDetails.push({ 
-                    key: "Feature Score", 
-                    isMatch: featureMatches > 0, 
-                    reason: `Total features matched: ${featureMatches} out of ${userFeatures.length} (+${featureMatches * 2} pts)` 
-                });
-                
-
-                // Final Model Data
-                rankedModels.push({
-                    model: model.name,
-                    score: score,
-                    isFiltered: false,
-                    matchDetails,
-                    description: model.description
-                });
-            });
-
-            // Sort models: Highest score first. Filtered models (score = -1) will automatically go to the bottom.
-            rankedModels.sort((a, b) => b.score - a.score);
-
-            return rankedModels;
+                return { model: model.name, score, isFiltered: false, description: model.description };
+            }).sort((a, b) => b.score - a.score);
         }
-
-        // --- 4. UI RENDERING ---
 
         function renderResults(results) {
             const container = document.getElementById('results-container');
             container.innerHTML = '';
-
             const passedModels = results.filter(r => !r.isFiltered);
             const filteredModels = results.filter(r => r.isFiltered);
 
             if (passedModels.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
+                container.innerHTML = `<div class="text-center p-6 bg-red-50 rounded-lg border border-red-200">
                         <p class="font-semibold text-red-700">No models passed the essential filters.</p>
-                        <p class="text-sm text-red-600 mt-1">Please check your filter options (People, Towing, Charging).</p>
-                    </div>
-                `;
+                        <p class="text-sm text-red-600 mt-1">Please adjust your filter options.</p>
+                    </div>`;
             } else {
-                // Render Passed Models
-                container.innerHTML += '<h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">Recommended & Scored Models</h3>';
+                container.innerHTML += '<h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">Recommended Models</h3>';
                 passedModels.forEach((result, index) => {
                     container.innerHTML += createModelCard(result, index + 1);
                 });
+            }
 
-                // Render Filtered Models
-                if (filteredModels.length > 0) {
-                    container.innerHTML += `
-                        <h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3 border-b pb-2">Filtered Out Models (${filteredModels.length})</h3>
-                    `;
-                    filteredModels.forEach(result => {
-                        container.innerHTML += createFilteredCard(result);
-                    });
-                }
+            if (filteredModels.length > 0) {
+                container.innerHTML += `<h3 class="text-xl font-semibold text-gray-700 mt-6 mb-3 border-b pb-2">Filtered Out Models</h3>`;
+                filteredModels.forEach(result => {
+                    container.innerHTML += createFilteredCard(result);
+                });
             }
         }
 
         function createModelCard(result, rank) {
-            const totalScore = 20; 
-            const percentage = ((result.score / totalScore) * 100).toFixed(0);
-
-            let detailsHtml = result.matchDetails.map(detail => `
-                <li class="flex items-start text-xs ${detail.isMatch ? 'text-green-700' : 'text-red-700'}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 mt-0.5 flex-shrink-0 ${detail.isMatch ? 'text-green-500' : 'text-red-500'}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        ${detail.isMatch ? '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />' : '<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />'}
-                    </svg>
-                    <span><strong>${detail.key}:</strong> ${detail.reason}</span>
-                </li>
-            `).join('');
-
-
-            return `
-                <div class="result-item p-4 border border-gray-200 rounded-lg transition duration-200 bg-white">
+            const totalScore = 6;
+            const percentage = result.score > 0 ? ((result.score / totalScore) * 100).toFixed(0) : 0;
+            return `<div class="p-4 border border-gray-200 rounded-lg bg-white">
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center space-x-3">
                             <span class="text-lg font-bold w-6 h-6 flex items-center justify-center rounded-full ${rank === 1 ? 'bg-yellow-400 text-gray-800' : 'bg-gray-100 text-gray-600'}">${rank}</span>
                             <h4 class="text-xl font-extrabold text-gray-800">${result.model}</h4>
-                            <span class="match-badge px-2 py-0.5 text-xs font-semibold rounded-full">${percentage}% Suitability</span>
+                            <span class="px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">${percentage}% Match</span>
                         </div>
                         <div class="text-2xl font-bold text-red-600">${result.score} pts</div>
                     </div>
                     <p class="text-sm text-gray-500 mb-3">${result.description}</p>
-                    
-                    <details class="mt-2">
-                        <summary class="text-sm font-semibold text-gray-600 cursor-pointer hover:text-red-600">
-                            View Detailed Scoring Breakdown
-                        </summary>
-                        <ul class="mt-2 pl-2 space-y-1">
-                            ${detailsHtml}
-                        </ul>
-                    </details>
-                </div>
-            `;
+                </div>`;
         }
 
         function createFilteredCard(result) {
-            const filterFailures = result.matchDetails.filter(d => !d.isMatch);
-            const failureReason = filterFailures.map(f => f.reason).join('; ');
-
-            return `
-                <div class="result-item p-3 border-l-4 border-red-400 rounded-lg bg-red-50 flex justify-between items-center">
+            return `<div class="p-3 border-l-4 border-red-400 rounded-lg bg-red-50 flex justify-between items-center">
                     <div>
                         <h4 class="text-lg font-semibold text-red-800">${result.model}</h4>
-                        <p class="text-xs text-red-600 mt-0.5">FILTERED: ${failureReason}</p>
+                        <p class="text-xs text-red-600 mt-0.5">Doesn't match your filter criteria.</p>
                     </div>
                     <span class="text-sm font-medium text-red-500">Excluded</span>
-                </div>
-            `;
+                </div>`;
         }
-
-        // --- 5. INITIALIZATION ---
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('results-container').innerHTML = `
-                <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
-                    <p class="font-semibold text-gray-600">Input your preferences on the left to start the scoring validation.</p>
-                </div>
-            `;
-        });
     </script>
 </body>
 </html>

@@ -18,9 +18,9 @@ Based on the user's answers, the application first filters the list of car model
 
 Filters Summary:
 
-Model Type Filter (Q1): You are correct. The application filters out any car model whose vibe does not match the user's selection for "What size car feels right for your needs?".
-EV Filter (Q5): You are correct. If the user selects "No" for "Do you have access to a charging point?", all fully electric models (isElectric: true) are removed from the recommendations.
-Scoring: Your understanding of the weighted scoring is correct. After filtering, the remaining models are scored as follows:
+Model Type Filter (Q1): The application filters out any car model whose vibe does not match the user's selection for "What size car feels right for your needs?".
+EV Filter (Q5): If the user selects "No" for "Do you have access to a charging point?", all fully electric models (isElectric: true) are removed from the recommendations.
+Scoring: After filtering, the remaining models are scored as follows:
 
 1.  Q3 (Prioritise): A match is worth 3 points.
 2.  Q2 (Long Distance): A match is worth 2 points.
